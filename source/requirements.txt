@@ -1,0 +1,8 @@
+openai
+matplotlib
+adjustText
+werkzeug
+python-multipart
+networkx
+bs4
+nltk

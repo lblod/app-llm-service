@@ -1,0 +1,7 @@
+
+/data
+/source/demos
+source/testing.ipynb
+*.gguf
+/source/library/__pycache__
+*.pyc

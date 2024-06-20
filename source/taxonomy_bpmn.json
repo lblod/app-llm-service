@@ -1,0 +1,51 @@
+{
+    "beleidsproces": [
+        "Opstellen & update meerjarenplan",
+        "Opstellen & update budget",
+        "Financiële voortgangsrapportering",
+        "Inhoudelijke voortgangsrapportering",
+        "OCMW raad",
+        "Vast bureau",
+        "Project- programma management"
+    ],
+    "ondersteunend proces": [
+        "Opmaak en update organogram en formatie",
+        "Werving & Selectie",
+        "Vorming & opleiding",
+        "Functionering & evaluatie",
+        "Personeelsadministratie",
+        "Aan- en afwezigheidsregistratie",
+        "Loonverwerking",
+        "Installatie en onderhoud ICT infrastructuur",
+        "Verwerken helpdesktickets",
+        "Aankoop exploitatiegoederen en -diensten",
+        "Aankoop investeringsgoederen",
+        "Onderhoud patrimonium",
+        "Verwerken technische aanvragen",
+        "Afvalbeheer",
+        "Externe communicatie",
+        "Interne communicatie",
+        "Postverwerking",
+        "Facturatie en inning (subproces)",
+        "inkomende facturen en betaling (subproces)",
+        "Thesauriebeheer",
+        "opstellen jaarrekening",
+        "boekhoudkundige verrichtingen",
+        "Klachtenproces",
+        "Metaproces - (validatie)",
+        "Archivering",
+        "Preventie – veiligheid"
+    ],
+    "primair proces": [
+        "Financiële steunverlening ll en equi ll",
+        "Aanvullende financiële steun",
+        "Sociale activering",
+        "Professionele activering",
+        "Schuldhulp budgetbeheer",
+        "Schuldhulp begeleiding",
+        "LOI (leefloon-ocmw-integratie)",
+        "Bijstand energie en wonen",
+        "BCSD (Bijzonder Comité voor de Sociale Dienst)(subproces)",
+        "Onthaal en intake (subproces)"
+    ]
+}

@@ -1,0 +1,109 @@
+version: '3.4'
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+
+services:
+  poc-llm:
+    image: svercoutere/mu-python-ml:0.1.0
+    environment:
+      MODE: "development"
+      MU_SPARQL_ENDPOINT: "http://triplestore:8890/sparql"
+      MU_SPARQL_UPDATEPOINT: "http://triplestore:8890/sparql"
+      MU_QUEUE_GRAPH: "http://mu.semte.ch/graphs/tasks"
+
+    volumes:
+      - ./source:/app/
+
+  identifier:
+    image: semtech/mu-identifier:1.10.1
+    labels:
+      - "logging=true"
+    logging: *default-logging
+    environment:
+      SESSION_COOKIE_SECURE: "on"
+      DEFAULT_MU_AUTH_ALLOWED_GROUPS_HEADER: '[{"variables":[],"name":"public"},{"variables":[],"name":"clean"}]'
+    links:
+      - dispatcher:dispatcher
+
+  dispatcher:
+    image: semtech/mu-dispatcher:2.1.0-beta.2
+    volumes:
+      - ./config/dispatcher:/config
+    labels:
+      - "logging=true"
+    restart: always
+    logging: *default-logging
+    links:
+      - resource:resource
+
+  database:
+    logging: *default-logging
+    labels:
+      - "logging=true"
+    image: semtech/mu-authorization:0.6.0-beta.5
+    environment:
+      MU_SPARQL_ENDPOINT: "http://triplestore:8890/sparql"
+    volumes:
+      - ./config/authorization:/config
+    restart: always
+    
+  triplestore:
+    logging: *default-logging
+    labels:
+      - "logging=true"
+    image: redpencil/virtuoso:1.2.0-rc.1
+    environment:
+      SPARQL_UPDATE: "true"
+      DEFAULT_GRAPH: "http://mu.semte.ch/application"
+    volumes:
+      - ./data/db:/data
+      - ./config/virtuoso/virtuoso.ini:/data/virtuoso.ini
+    restart: always
+
+  migrations:
+    logging: *default-logging
+    labels:
+      - "logging=true"
+    image: semtech/mu-migrations-service:0.9.0
+    links:
+      - triplestore:database
+    volumes:
+      - ./config/migrations:/data/migrations
+    restart: always
+
+  resource:
+    logging: *default-logging
+    labels:
+      - "logging=true"
+    image: semtech/mu-cl-resources:1.23.0
+    environment:
+      CACHE_CLEAR_PATH: "http://cache/.mu/clear-keys"
+    links:
+      - database:database
+    volumes:
+      - ./config/resources:/config
+    restart: always
+
+  cache:
+    image: semtech/mu-cache:2.0.2
+    links:
+      - resource:backend
+    labels:
+      - "logging=true"
+    restart: always
+    logging: *default-logging
+
+  deltanotifier:
+    image: semtech/mu-delta-notifier
+    volumes:
+      - ./config/delta:/config
+    labels:
+      - "logging=true"
+    restart: always
+    logging: *default-logging
+
