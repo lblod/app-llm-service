@@ -165,10 +165,13 @@ When a pending task is identified, the worker invokes `process_task(library.Task
 
 
 # Creating a custom LLM and finetuning it
+## Running a (Custom) Model Locally
+
+The service can be configured to run locally or remotely by specifying the inference endpoint of the LLM using the environment variables `LLM_API_KEY`, `LLM_ENDPOINT`, `LLM_MODEL_NAME`, and `LLM_ON_AZURE`. Ollama is an easy-to-use package for running LLMs locally and is compatible with the OpenAI standard, making it simple to switch between commercial and open-source LLM models for development and testing. Instructions for setting up Ollama with a (custom) opensource LLM model can be found at [ollama-server-custom](https://github.com/lblod/app-llm-service/tree/main/ollama-server-custom).
 
 # Demo
 
-A small demo of the search functionality is available under `source\demos`. The demo uses the Python `streamlit` package to create a simple interface where queries can be made using the mu-search dense vector search with the embedding created from the service.
+A small demo of the LLM functionality is available under `source\demos`. The demo uses the Python `streamlit` package to create a simple interface where the LLM can be prompted.
 
 To run the demo, you can follow these steps:
 
@@ -181,7 +184,7 @@ To run the demo, you can follow these steps:
 2. **Run the Streamlit Application**:
    Navigate to the `source\demos` directory and run the Streamlit app:
    ```bash
-   streamlit run demo_semantic_search.py
+   streamlit run demo_summarize_besluiten.py
    ```
 
 3. **Using the Interface**:
