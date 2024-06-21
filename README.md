@@ -165,6 +165,29 @@ When a pending task is identified, the worker invokes `process_task(library.Task
 
 
 # Creating a custom LLM and finetuning it
+
+## Generating artificial training data
+
+The [llm-training/Llama-3-8b-instruct-dataset-generation.ipynb](llm-training/Llama-3-8b-instruct-dataset-generation.ipynb]) Jupyter notebook automates the creation of an artificial dataset for context-aware tasks like keyword extraction, classification, summarization, and translation. It generates prompts and context data, uses a robust model (e.g., GPT-4o) to produce responses, and saves the results as JSON for further processing. The workflow includes generating a prompt and system message, requesting a response, extracting the JSON output, and saving it along with metadata for training and evaluation purposes. All prompt are formated according to the following template:
+
+```
+####
+Context: {context}
+####
+{task}
+```
+## Creating a artificial dataset for finetuning
+
+The [llm-training/Llama-3-8b-instruct-dataset.ipynb](llm-training/Llama-3-8b-instruct-dataset.ipynb]) Jupyter notebook contains the code for formatting the artificial training samples, the creation of a HuggingFace dataset and uploading it onto HuggingFace.
+
+
+## Finetunning an LLM on the dataset
+
+For finetuning our model, we rely on the open-source finetuning package Unsloth. In the [llm-training/Llama-3-8b-instruct-abb.ipynb](llm-training/Llama-3-8b-instruct-abb.ipynb) notebook, a Llama-3-8b-instruct model is finetuned on the [svercoutere/llama3_abb_instruct_dataset](https://huggingface.co/datasets/svercoutere/llama3_abb_instruct_dataset) dataset, which is generated using the steps mentioned above. This Jupyter notebook describes the process of finetuning a model using LoRA.
+
+LoRA (Low-Rank Adaptation) is a technique under Parameter Efficient Fine-Tuning (PEFT) that enhances fine-tuning efficiency by updating only two smaller matrices that approximate the weight matrix of the pre-trained LLM, creating a LoRA adapter. This fine-tuned adapter is then integrated into the pre-trained model for subsequent inference tasks. After LoRA fine-tuning, the original LLM remains unchanged, and the LoRA adapter, which is much smaller, is used for specific tasks. This approach reduces memory requirements when handling multiple tasks and use cases.
+
+
 ## Running a (Custom) Model Locally
 
 The service can be configured to run locally or remotely by specifying the inference endpoint of the LLM using the environment variables `LLM_API_KEY`, `LLM_ENDPOINT`, `LLM_MODEL_NAME`, and `LLM_ON_AZURE`. Ollama is an easy-to-use package for running LLMs locally and is compatible with the OpenAI standard, making it simple to switch between commercial and open-source LLM models for development and testing. Instructions for setting up Ollama with a (custom) opensource LLM model can be found at [ollama-server-custom](https://github.com/lblod/app-llm-service/tree/main/ollama-server-custom).
