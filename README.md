@@ -2,7 +2,9 @@
 
 The `app-llm-service` is a backend service for LLM inference focused on BPMN files and text. It leverages advanced machine learning techniques to enhance search capabilities and is built on the mu.semte.ch microservices stack. This service facilitates various NLP tasks, including keyword extraction, text classification according to any taxonomy, translation, and general LLM inference.
 
+## Where does it fit into the greater abb-llm vision?
 
+Check the [general_vision.md](GENERAL_VISION.md).
 
 ## What does it do?
 
@@ -39,7 +41,6 @@ When extending the functionality with the current model or a similar small LLM, 
 #### Possible extension
 
 "Extend the `app-llm-service` to handle summarization and retrieval-augmented generation tasks for BPMN diagrams and besluiten (decisions). This involves summarizing search results by theme or topic, with potential for basic QA capabilities after further fine-tuning to maintain context."
-
 
 
 ## Getting started
