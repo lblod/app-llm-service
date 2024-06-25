@@ -1,7 +1,14 @@
 
 /data
-/source/demos
 source/testing.ipynb
 *.gguf
 /source/library/__pycache__
 *.pyc
+docker-compose-local.yml
+classifier-agendapunten/classification_agendapunt_openai_dataset_meta.jsonl
+classifier-agendapunten/classification_agendapunt_openai_dataset.jsonl
+classifier-agendapunten/spacy_textcat_test.spacy
+classifier-agendapunten/spacy_textcat_train.spacy
+llm-training/data/besluiten_title_description.csv
+source/demos/demo_chat_bpmn.py
+source/demos/demo_chat_besluiten.py

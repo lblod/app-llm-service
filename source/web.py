@@ -28,6 +28,14 @@ upload_folder = '/app/uploads/'
 accepted_file_extensions = ['.bpmn', '.txt', '.xml']
 
 
+# Testing different providers and models
+#os.environ['LLM_ENDPOINT'] = 'https://api.deepinfra.com/v1/openai'
+#os.environ['LLM_MODEL_NAME'] = 'meta-llama/Meta-Llama-3-70B-Instruct'
+
+#os.environ['LLM_ENDPOINT'] = 'https://abb-openai.openai.azure.com/'
+#os.environ['LLM_MODEL_NAME'] = 'gpt-4o'
+
+
 # Initialize the LLM
 LLM_API_KEY = os.environ.get('LLM_API_KEY', 'ollama')
 LLM_ENDPOINT = os.environ.get('LLM_ENDPOINT', 'http://localhost:11434/v1/')
@@ -36,6 +44,8 @@ LLM_ON_AZURE = os.environ.get('LLM_ON_AZURE', 'False').lower() == 'true'
 
 default_graph = os.getenv('DEFAULT_GRAPH', "http://mu.semte.ch/graphs/public")
 queue_graph = os.getenv('QUEUE_GRAPH', "http://mu.semte.ch/graphs/tasks")
+
+print(f"Starting LLM with endpoint: {LLM_ENDPOINT}, model: {LLM_MODEL_NAME}, azure: {LLM_ON_AZURE}, api_key: {LLM_API_KEY}")
 
 
 abb_llm = LLM(base_url = LLM_ENDPOINT, api_key = LLM_API_KEY, model_name = LLM_MODEL_NAME, azure = LLM_ON_AZURE)
