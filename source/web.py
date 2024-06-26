@@ -538,8 +538,11 @@ async def extract_keywords_bpmn(file: UploadFile = File(...)):
 
     Example:
         To use this endpoint, you can send a POST request to `/bpmn/extract_keywords` with a BPMN file as the request body.
-
         The response will be a list of keywords extracted from the BPMN file.
+
+            Example response:{
+            "keywords": ["Vergunning", "Aanvraag", "Bouwvergunning", "Omgevingsvergunning", "Administratieve lasten"]
+            }
     """
     try:
         # Save the file
@@ -570,8 +573,32 @@ async def classify_bpmn(file: UploadFile = File(...), classification_input: Clas
 
     Example:
         To use this endpoint, you can send a POST request to `/bpmn/classify` with a BPMN file as the request body and a JSON object containing the taxonomy.
+        Optionally, you can also provide a JSON object containing the taxonomy.
 
-        The response will be the classification of the BPMN file.
+        Example taxonomy (DEFAULT):
+        {
+            "beleidsproces": [
+                "Opstellen & update meerjarenplan",
+                "Opstellen & update budget",
+                ...
+            ],
+            "ondersteunend proces": [
+                "Opmaak en update organogram en formatie",
+                "Werving & Selectie",
+                "Vorming & opleiding",
+                ...
+            ],
+            "primair proces": [
+                "Financiële steunverlening ll en equi ll",
+                "Aanvullende financiële steun",
+                "Sociale activering",
+                ...
+        }
+
+
+        The response will be the classification of the BPMN file:
+
+        {"classification": {"beleidsproces": ["Opstellen & update meerjarenplan"]}}
     """
     try:
         # Save the file
@@ -605,7 +632,15 @@ async def translate_bpmn(file: UploadFile = File(...), language: str = Body(defa
     Example:
         To use this endpoint, you can send a POST request to `/bpmn/translate` with a BPMN file as the request body.
 
-        The response will be the translated BPMN file.
+        example translation format(DEFAULT):
+        {
+            "id": "do not translate",
+            "name": "Translated text",
+            "source_language": "Source language",
+            "target_language": "Target language"
+        }
+
+        The response will be a dict of the translated names of each flow object in the BPMN file.
     """
     try:
         # Save the file
@@ -624,6 +659,34 @@ async def translate_bpmn(file: UploadFile = File(...), language: str = Body(defa
 # Agendapunten specific endpoints
 @app.post("/agendapunten/extract_keywords", tags=["keyword_extraction"])
 async def extract_keywords_agendapunten(agendapunt: Dict = Body(...)):
+    """
+    Extracts keywords from the given agendapunt.
+    
+    Args:
+        agendapunt (dict): The agendapunt from which keywords should be extracted.
+        
+    Returns:
+        list: A list of keywords extracted from the agendapunt.
+
+    Raises:
+        HTTPException: If there's an error during the keyword extraction.
+    
+    Example:
+        To use this endpoint, you can send a POST request to `/agendapunten/extract_keywords` with a JSON object containing the agendapunt.
+        
+        POST request:
+        {
+            "agendapunt": {
+                "title": "Agendapunt title",
+                "description": "Agendapunt description"
+            }
+        }
+
+        The response will be a list of keywords extracted from the agendapunt:
+
+        {keywords: ["keyword1", "keyword2", "keyword3"]}
+
+        """
     try:
         # Extract keywords from the agendapunt
         keywords, _ = agendapunten_processor.extract_keywords(agendapunt)
@@ -633,6 +696,66 @@ async def extract_keywords_agendapunten(agendapunt: Dict = Body(...)):
 
 @app.post("/agendapunten/classify", tags=["classification"])
 async def classify_agendapunten(agendapunt: Dict = Body(...), classification_input:ClassificationInputTaxonomy = None):
+    """
+    Classifies an agendapunt according to the provided taxonomy.
+
+    Args:
+        agendapunt (dict): The agendapunt to be classified.
+        classification_input (ClassificationInput): An object containing the taxonomy. This is optional.
+
+    Returns:
+        str: The classification of the agendapunt according to the taxonomy.
+
+    Raises:
+        HTTPException: If there's an error during the classification.
+
+    Example:
+        To use this endpoint, you can send a POST request to `/agendapunten/classify` with a JSON object containing the agendapunt.
+        Optionally, you can also provide a JSON object containing the taxonomy.
+
+        Example agendapunt:
+        {   "uuid": "123",
+            "title": "Agendapunt title",
+            "description": "Agendapunt description"
+        }
+
+        Example taxonomy (DEFAULT):
+        {
+            "burgerzaken": ["identiteit en verhuizen",
+                "geboorte, erkenning en adoptie",
+                "huwen, samenwonen en scheiden",
+                "legalisatie",
+                ...
+
+
+            "mobiliteit en openbare werken": [
+                    "mobiliteit",
+                    "auto",
+                    "fiets",
+                    ...
+
+            "groen en milieu": [
+                    "afval",
+                    "sluikstort",
+                    ...
+
+            "onderwijs en kinderopvang": [
+                    "onderwijs",
+                    "volwasseneducatie en levenslang leren",
+                    "school",
+                    "onderwijsloopbaan",
+                    ...
+                
+            "wonen en (ver)bouwen": ["aangepast wonen",
+                    "betaalbaar wonen",
+                    "infrastructuur",
+                    ...
+            
+        }
+
+        Example response: 
+        {classification: {"burgerzaken": ["identiteit en verhuizen"]}}
+    """
     try:
         # Classify the agendapunt
         taxonomy = classification_input.taxonomy if classification_input else None
@@ -644,6 +767,51 @@ async def classify_agendapunten(agendapunt: Dict = Body(...), classification_inp
 
 @app.post("/agendapunten/translate", tags=["translation"])
 async def translate_agendapunten(agendapunt: Dict = Body(...), language: str = Body(default="en"), translation_format: str = None):
+    """
+    Translates the given agendapunt to the specified language.
+
+    Args:
+        agendapunt (dict): The agendapunt to be translated.
+        language (str): The target language for the translation.
+        translation_format (str): The format for the translation.
+
+    Returns:
+        dict: A dictionary containing the translated agendapunt.
+
+    Raises:
+        HTTPException: If there's an error during the translation.
+
+    Example:
+        To use this endpoint, you can send a POST request to `/agendapunten/translate` with a JSON object containing the agendapunt.
+        Specify the target language and the format for the translation.
+
+
+        Example inputs:
+        {   "id": "123",
+            "title": "Dit is een zin die vertaald moet worden naar het Engels.",
+            "description": "Dit is een zin die vertaald moet worden naar het Engels."
+        }
+        "language": "en"
+
+        "format": {
+                "id": "do not translate",
+                "title": "Translated text",
+                "description": "Translated text"
+                "source_language": "Source language",
+                "target_language": "Target language"
+        }
+
+        The response will be a dictionary containing the translated agendapunt according to the specified language and format:
+
+        {
+            "id": "123",
+            "title": "This is a sentence that needs to be translated into English.",
+            "description": "This is a sentence that needs to be translated into English."
+            "source_language": "nl",
+            "target_language": "en"
+        }
+  
+    """
     try:
         # Translate the agendapunt
         translation, _ = agendapunten_processor.translate(agendapunt, language, translation_format)
