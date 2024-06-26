@@ -13,6 +13,10 @@ services:
     ports:
       - "2000:80"
 
+  ollama:
+    ports:
+      - "11434:11434"
+
   resource:
     ports:
       - "3000:80"

@@ -15,9 +15,24 @@ services:
       MU_SPARQL_ENDPOINT: "http://triplestore:8890/sparql"
       MU_SPARQL_UPDATEPOINT: "http://triplestore:8890/sparql"
       MU_QUEUE_GRAPH: "http://mu.semte.ch/graphs/tasks"
+      LLM_API_KEY: "ollama" # Default value of ollama
+      LLM_ENDPOINT: "http://ollama:11434/v1/" # Can be from any provided that is compatible with the openai (deepinfra, azure, etc.)
+      LLM_MODEL_NAME: "llama3abb" # Name of the model to use, can be any model the endpoint supports (ollama: you can pull more opensource model from ollama and run them as well locally)
+      LLM_ON_AZURE: False # Set to True if you want to use the Azure API (uses different class of the openai package)
 
     volumes:
       - ./source:/app/
+
+
+  ollama:
+    image: svercoutere/mu-local-llm:latest
+    environment:
+      OLLAMA_MODEL: "llama3abb" #create the following based on the /models/<modelname>/<modelname>.modelfile
+    volumes:
+      - "./ollama-server-custom/models:/models" # Place the model in the /models folder under /models/<modelname>/<modelname>.gguf, can be downloaded from hf (svercoutere/llama-3-8b-instruct-abb)
+
+
+
 
   identifier:
     image: semtech/mu-identifier:1.10.1

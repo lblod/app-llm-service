@@ -38,7 +38,7 @@ accepted_file_extensions = ['.bpmn', '.txt', '.xml']
 
 # Initialize the LLM
 LLM_API_KEY = os.environ.get('LLM_API_KEY', 'ollama')
-LLM_ENDPOINT = os.environ.get('LLM_ENDPOINT', 'http://localhost:11434/v1/')
+LLM_ENDPOINT = os.environ.get('LLM_ENDPOINT', 'http://ollama:11434/v1/')
 LLM_MODEL_NAME = os.environ.get('LLM_MODEL_NAME', 'llama3abb')
 LLM_ON_AZURE = os.environ.get('LLM_ON_AZURE', 'False').lower() == 'true'
 

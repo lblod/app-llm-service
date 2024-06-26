@@ -42,27 +42,36 @@ When extending the functionality with the current model or a similar small LLM, 
 
 "Extend the `app-llm-service` to handle summarization and retrieval-augmented generation tasks for BPMN diagrams and besluiten (decisions). This involves summarizing search results by theme or topic, with potential for basic QA capabilities after further fine-tuning to maintain context."
 
+## Getting Started
 
-## Getting started
+The model is built to run with both a local LLM (via Ollama) or accept an endpoint from an LLM provider (Deepinfra, Azure, OpenAI, etc.), through which a local or private model can be used.
 
-1. make sure all [requirements](#Requirements-and-assumptions) are met
-2. clone this repository
+### For the Local Setup:
+
+1. Make sure all [requirements](#Requirements-and-assumptions) are met.
+2. Download the .gguf model file from [svercoutere/llama-3-8b-instruct-abb](https://huggingface.co/svercoutere/llama-3-8b-instruct-abb/tree/main), rename it to `llama3abb`, and place it under `./ollama-server-custom/models/llama3abb`. For more information on how to run a Docker container with Ollama, create Ollama versions of your custom models, and run inference, see the README at [ollama-server-custom/readme.md](./ollama-server-custom/readme.md).
+3. Clone this repository:
 
 ```bash
 git clone https://github.com/lblod/app-llm-service
 ```
 
-3. run the project
+4. Run the project:
 
 ```bash
 cd /path/to/mu-project
-```
-
-```bash
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
 
 You can shut down using `docker-compose stop` and remove everything using `docker-compose rm`.
+
+### For Running Other Custom Models
+
+You'll need to create a new model file that works with your .gguf model and specify the locations of the folder containing both the .gguf and .modelfile as an environment variable in the Ollama Docker container.
+
+### For Running Models from an External Provider
+
+Simply change the environment variables `LLM_API_KEY`, `LLM_ENDPOINT`, `LLM_MODEL_NAME`, and `LLM_ON_AZURE` of the `poc-llm` container. It should work out of the box with any provider that is OpenAI compatible.
 
 ## Provided endpoints
 
